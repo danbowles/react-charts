@@ -1,5 +1,5 @@
 {
-  "name": "react-bar-chart",
+  "name": "react-charts",
   "license": "MIT",
   "version": "0.1.0",
   "description": "Charts demo using d3 and react",
