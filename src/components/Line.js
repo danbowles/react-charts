@@ -4,24 +4,16 @@ import { line as d3Line, curveBasis } from 'd3-shape';
 import './Line.css';
 
 class Line extends Component {
-  constructor(props) {
-    super(props);
-
-    console.log('');
-  }
-
   render() {
     const lineGenerator = d3Line();
 
     const {
-      scales: { xScale, yScale},
-      margins: { bottom: bottomMargin },
+      scales: { xScale, yScale },
       data,
-      svgDimensions: { height },
     } = this.props;
 
     lineGenerator
-      .x(function(d, i) {
+      .x(function lineX(d, i) {
         return xScale(i);
       })
       .y(function(d) {
@@ -39,6 +31,9 @@ class Line extends Component {
   }
 }
 
-Line.propTypes = 
+Line.propTypes = {
+  scales: PropTypes.shape(PropTypes.object).isRequired,
+  data: PropTypes.shape(PropTypes.arrayOf(PropTypes.object)).isRequired,
+};
 
 export default Line;
