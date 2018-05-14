@@ -13,18 +13,18 @@ export default (ChartComponent) => (
     }
 
     componentDidMount() {
-      this.fitParentContainer()
-      window.addEventListener('resize', this.fitParentContainer)
+      this.fitParentContainer();
+      window.addEventListener('resize', this.fitParentContainer);
     }
 
     componentWillUnmount() {
-      window.removeEventListener('resize', this.fitParentContainer)
+      window.removeEventListener('resize', this.fitParentContainer);
     }
 
     fitParentContainer() {
-      const { containerWidth } = this.state
+      const { containerWidth } = this.state;
       const currentContainerWidth = this.chartContainer
-        .getBoundingClientRect().width
+        .getBoundingClientRect().width;
 
       const shouldResize = containerWidth !== currentContainerWidth
 
