@@ -27,6 +27,10 @@ const Container = styled.div`
 const SpacedCard = styled(Card)`
   margin: 0 auto 2em;
   max-width: 75%;
+
+  @media (max-width: 700px) {
+    max-width: 100%;
+  }
 `;
 
 const App = () => (
