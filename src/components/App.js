@@ -13,7 +13,7 @@ import { barChart, lineChart } from '../data';
 const theme = createMuiTheme();
 
 const margins = {
-  top: 50,
+  top: 30,
   right: 20,
   bottom: 100,
   left: 60,
@@ -56,7 +56,7 @@ const App = () => (
           <Typography gutterBottom variant="headline" component="h2">
             Line Chart - Basis
           </Typography>
-          <LineChart margins={margins} data={lineChart} />
+          <LineChart margins={{ ...margins, bottom: 50 }} data={lineChart} />
         </CardContent>
       </SpacedCard>
     </Container>

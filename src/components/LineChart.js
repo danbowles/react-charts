@@ -38,9 +38,14 @@ class BarChart extends Component {
       svgDimensions: { width, height },
     };
 
+    const axesLabels = {
+      xLabel: 'Other Series',
+      yLabel: 'Other Amount',
+    };
+
     return (
       <svg width={width} height={height}>
-        <Axes {...common} />
+        <Axes {...common} {...axesLabels} />
         {data.map((lineData) => (
           <Line
             {...common}

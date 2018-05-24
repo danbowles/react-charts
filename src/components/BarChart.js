@@ -42,7 +42,7 @@ class BarChart extends Component {
     const axesLabels = {
       xLabel: 'Series',
       yLabel: 'Amount',
-    }
+    };
 
     return (
       <svg width={width} height={height}>
