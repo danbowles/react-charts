@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3Axis from 'd3-axis';
 import { select as d3Select } from 'd3-selection';
+import AxisLabel from './AxisLabel';
 import './Axis.css';
 
 class Axis extends Component {
@@ -26,11 +27,14 @@ class Axis extends Component {
 
   render() {
     return (
-      <g
-        className={`axis axis-${this.props.orient}`}
-        ref={(el) => { this.axisElement = el; }}
-        transform={this.props.translate}
-      />
+      <g>
+        <g
+          className={`axis axis-${this.props.orient}`}
+          ref={(el) => { this.axisElement = el; }}
+          transform={this.props.translate}
+        />
+        <AxisLabel {...this.props.label} />
+      </g>
     );
   }
 }
