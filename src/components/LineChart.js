@@ -5,7 +5,7 @@ import Axes from '../components/Axes';
 import Line from '../components/Line';
 import ResponsiveChart from './ResponsiveChart';
 
-class BarChart extends Component {
+class LineChart extends Component {
   constructor() {
     super();
 
@@ -16,13 +16,13 @@ class BarChart extends Component {
   render() {
     const {
       margins,
-      height = 500,
+      height,
       parentWidth,
       data,
     } = this.props;
 
     const maxValue = Math.max(...data[0].map((d) => d.value));
-    const width = Math.max(parentWidth, (this.props.width || 400));
+    const width = parentWidth;
 
     const xScale = this.xScale
       .domain(data[0].map((d, i) => i))
@@ -48,6 +48,7 @@ class BarChart extends Component {
         <Axes {...common} {...axesLabels} />
         {data.map((lineData) => (
           <Line
+            key={Math.random()}
             {...common}
             data={lineData}
           />
@@ -57,17 +58,20 @@ class BarChart extends Component {
   }
 }
 
-BarChart.propTypes = {
+LineChart.defaultProps = {
+  height: 500,
+}
+
+LineChart.propTypes = {
   margins: PropTypes.shape({
     top: PropTypes.number,
     left: PropTypes.number,
     bottom: PropTypes.number,
     right: PropTypes.number,
   }).isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
+  height: PropTypes.number,
   parentWidth: PropTypes.number.isRequired,
-  data: PropTypes.shape.isRequired,
+  data: PropTypes.arrayOf(PropTypes.array).isRequired,
 }
 
-export default ResponsiveChart(BarChart);
+export default ResponsiveChart(LineChart);

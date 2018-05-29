@@ -6,8 +6,8 @@ import Bars from './Bars';
 import ResponsiveChart from './ResponsiveChart';
 
 class BarChart extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.xScale = scaleBand();
     this.yScale = scaleLinear();
@@ -16,21 +16,24 @@ class BarChart extends Component {
   render() {
     const {
       margins,
-      height = 500,
+      height,
       parentWidth,
-      data,
+      data: {
+        data = [],
+        xAxis,
+        yAxis,
+      },
     } = this.props;
 
-    const maxValue = Math.max(...data.map((d) => d.value));
-    const width = Math.max(parentWidth, (this.props.width || 400));
+    const width = parentWidth;
 
     const xScale = this.xScale
-      .padding(0.4)
-      .domain(data.map((d) => d.title))
+      .padding(xAxis.padding || 0.4)
+      .domain(xAxis.domain)
       .range([margins.left, width - margins.right]);
 
     const yScale = this.yScale
-      .domain([0, maxValue])
+      .domain(yAxis.domain)
       .range([height - margins.bottom, margins.top]);
 
     const common = {
@@ -40,8 +43,8 @@ class BarChart extends Component {
     };
 
     const axesLabels = {
-      xLabel: 'Series',
-      yLabel: 'Amount',
+      xLabel: xAxis.label,
+      yLabel: yAxis.label,
     };
 
     return (
@@ -50,12 +53,16 @@ class BarChart extends Component {
         <Bars
           {...common}
           data={data}
-          maxValue={maxValue}
+          domain={yAxis.domain}
         />
       </svg>
     );
   }
 }
+
+BarChart.defaultProps = {
+  height: 500,
+};
 
 BarChart.propTypes = {
   margins: PropTypes.shape({
@@ -64,10 +71,9 @@ BarChart.propTypes = {
     bottom: PropTypes.number,
     right: PropTypes.number,
   }).isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
+  height: PropTypes.number,
   parentWidth: PropTypes.number.isRequired,
-  data: PropTypes.shape.isRequired,
+  data: PropTypes.shape({}).isRequired,
 }
 
 export default ResponsiveChart(BarChart);
