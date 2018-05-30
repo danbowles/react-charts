@@ -3,12 +3,14 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import PropTypes from 'prop-types';
 import Axes from '../components/Axes';
 import Bars from './Bars';
+import Legend from './Legend';
 import ResponsiveChart from './ResponsiveChart';
 
-class BarChart extends Component {
+class MultiBarChart extends Component {
   constructor(props) {
     super(props);
 
+    this.xBarScale = scaleBand();
     this.xScale = scaleBand();
     this.yScale = scaleLinear();
   }
@@ -19,23 +21,29 @@ class BarChart extends Component {
       height,
       parentWidth,
       data: {
-        colors,
         data = [],
+        keys,
         xAxis,
         yAxis,
+        colors,
       },
     } = this.props;
 
     const width = parentWidth;
 
     const xScale = this.xScale
-      .padding(xAxis.padding || 0.4)
+      .padding(xAxis.padding || 0.1)
       .domain(xAxis.domain)
       .range([margins.left, width - margins.right]);
 
+    const xBarScale = this.xBarScale
+      .padding(0.05)
+      .domain(keys)
+      .rangeRound([0, xScale.bandwidth()]);
+
     const yScale = this.yScale
       .domain(yAxis.domain)
-      .range([height - margins.bottom, margins.top]);
+      .range([height - margins.bottom, margins.top]).nice();
 
     const common = {
       scales: { xScale, yScale },
@@ -48,25 +56,35 @@ class BarChart extends Component {
       yLabel: yAxis.label,
     };
 
+    const barGroups = data.map((barGroupData) => {
+      return (
+        <g className="barsGroup" transform={`translate(${xScale(barGroupData.key)}, 0)`}>
+          <Bars
+            data={barGroupData.values}
+            scales={{ xScale: xBarScale, yScale }}
+            margins={margins}
+            svgDimensions={common.svgDimensions}
+            colors={colors}
+          />
+        </g>
+      );
+    })
+
     return (
       <svg width={width} height={height}>
         <Axes {...common} {...axesLabels} />
-        <Bars
-          {...common}
-          data={data}
-          barLabels
-          colors={colors}
-        />
+        {barGroups}
+        <Legend {...{ colors, keys, width }} />
       </svg>
     );
   }
 }
 
-BarChart.defaultProps = {
+MultiBarChart.defaultProps = {
   height: 500,
 };
 
-BarChart.propTypes = {
+MultiBarChart.propTypes = {
   margins: PropTypes.shape({
     top: PropTypes.number,
     left: PropTypes.number,
@@ -78,4 +96,4 @@ BarChart.propTypes = {
   data: PropTypes.shape({}).isRequired,
 }
 
-export default ResponsiveChart(BarChart);
+export default ResponsiveChart(MultiBarChart);

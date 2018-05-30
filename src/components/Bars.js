@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { scaleLinear } from 'd3-scale';
-import { interpolateLab } from 'd3-interpolate';
+import { scaleOrdinal } from 'd3-scale';
 import BarLabel from './BarLabel';
 
 class Bars extends Component {
   constructor(props) {
     super(props);
 
-    this.colorScale = scaleLinear()
-      .domain(props.domain)
-      .range(['#CDDC39', '#8BC34A'])
-      .interpolate(interpolateLab);
+    // this.colorScale = scaleLinear()
+    this.colorScale = scaleOrdinal()
+      .range(props.colors);
   }
 
   render() {
@@ -25,7 +23,7 @@ class Bars extends Component {
     const bars = data.map(({ key, value }) => {
       const barHeight = height - bottomMargin - yScale(value);
       return (
-        <g key={`${key}{value}`}>
+        <g className="bar" key={`${key}{value}`}>
           <rect
             key={key}
             x={xScale(key)}
@@ -34,23 +32,31 @@ class Bars extends Component {
             width={xScale.bandwidth()}
             fill={this.colorScale(value)}
           />
-          <BarLabel
-            x={xScale(key) + (xScale.bandwidth() / 2)}
-            y={yScale(value) + ((barHeight < 26) ? -20 : 2)}
-            text={value}
-            outside={barHeight < 26}
-          />
+          {
+            this.props.barLabels &&
+            <BarLabel
+              x={xScale(key) + (xScale.bandwidth() / 2)}
+              y={yScale(value) + ((barHeight < 26) ? -20 : 2)}
+              text={value}
+              outside={barHeight < 26}
+            />
+          }
         </g>
       );
     });
 
     return (
-      <g>
+      <g className="barsWrap">
         {bars}
       </g>
     );
   }
 }
+
+Bars.defaultProps = {
+  barLabels: false,
+  colors: ['#CCCCCC'],
+};
 
 Bars.propTypes = {
   scales: PropTypes.shape({
@@ -63,7 +69,8 @@ Bars.propTypes = {
     value: PropTypes.number,
   })).isRequired,
   svgDimensions: PropTypes.shape({}).isRequired,
-  domain: PropTypes.arrayOf(PropTypes.number).isRequired,
+  barLabels: PropTypes.bool,
+  colors: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default Bars;

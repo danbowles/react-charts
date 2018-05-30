@@ -7,8 +7,9 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import BarChart from './BarChart';
+import MultiBarChart from './MultiBarChart';
 import LineChart from './LineChart';
-import { barChart, lineChart } from '../data';
+import { barChart, lineChart, multiBarChart } from '../data';
 
 const theme = createMuiTheme();
 
@@ -43,6 +44,17 @@ const App = () => (
       </Toolbar>
     </AppBar>
     <Container>
+      <SpacedCard>
+        <CardContent>
+          <Typography gutterBottom variant="headline" component="h2">
+            Coverage Numbers and Rates by Type of Health Insurance: 2013 to 2016
+          </Typography>
+          <Typography gutterBottom variant="subheading">
+            Numbers in thousands
+          </Typography>
+          <MultiBarChart margins={margins} data={multiBarChart} />
+        </CardContent>
+      </SpacedCard>
       <SpacedCard>
         <CardContent>
           <Typography gutterBottom variant="headline" component="h2">
